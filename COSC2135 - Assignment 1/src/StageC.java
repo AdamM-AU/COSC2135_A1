@@ -1,24 +1,20 @@
-import java.util.Scanner;  // Import the Scanner class
+import java.util.Scanner; // Import the Scanner class
 
-//  All user input is processed here?                                                                                                                                                             
 public class StageC {
-	Scanner consoleInput = new Scanner(System.in); // Creating Scanner Object
-	String userInput = "";
-	int coachNumRows = 0;
-	int coachNumSeats = 0;
-	String coachDestination = "";
-	String[] input;
-	int counter; // Recyclable counter
 	private Coach backEnd;
-	
+	Scanner consoleInput = new Scanner(System.in); // Creating Scanner Object
+	String userInput = ""; // Scanner Input
+	String[] input; // Processed Scanner Input Array
+	int counter; // Recyclable counter
+
 	public StageC(Coach backEnd) {
 		this.backEnd = backEnd;
 		this.uiCoachAdd(); // Request Coach information
-		
+
 		while (!userInput.equals("q")) {
 			// Main Application Menu
-			System.out.println("Crappy Booking System 1.0");
-			System.out.println("*************************");
+			System.out.println("     D.C.A - Booking System");
+			System.out.println("********************************");
 			System.out.println("");
 			System.out.println("( 1 ) - Show Coach Information");
 			System.out.println("( 2 ) - Show Seating");
@@ -31,11 +27,12 @@ public class StageC {
 			System.out.println("");
 			System.out.print("Please Make a Selection : ");
 			this.userInput = this.consoleInput.nextLine();
-			
-			// Validate input and an integer & as expected input, if not match or failed to validate do nothing so we loop again
-			if (this.userInput.matches("^[0-9]+$") && this.userInput.matches("1|2|3|4|5|6|7|8|9")) {
-				int userSelection = Integer.parseInt(this.userInput); // Temp Input Store 
-				
+
+			// Validate input and an integer & as expected input, if not match or failed to
+			// validate do nothing so we loop again
+			if (this.userInput.matches("^[0-9]+$") && this.userInput.matches("1|2|3|4|5")) {
+				int userSelection = Integer.parseInt(this.userInput); // Temp Input Store
+
 				// Match User Selection
 				// Switch would have been nicer to use here...
 				if (userSelection == 1) {
@@ -44,20 +41,22 @@ public class StageC {
 					this.backEnd.coachFetch();
 					System.out.println("Press anykey to continue...");
 					this.userInput = this.consoleInput.nextLine();
-				} 
-				else if (userSelection == 2) {
+				} else if (userSelection == 2) {
 					System.out.println("");
 					this.backEnd.coachSeating();
 					System.out.println("Press anykey to continue...");
 					this.userInput = this.consoleInput.nextLine();
-				}
-				else if (userSelection == 4) {
+				} else if (userSelection == 3) {
+					System.out.println("");
+					this.backEnd.coachTicketReport();
+					System.out.println("Press anykey to continue...");
+					this.userInput = this.consoleInput.nextLine();
+				} else if (userSelection == 4) {
 					System.out.println("");
 					this.uiCoachBook();
 					System.out.println("Press anykey to continue...");
-					this.userInput = this.consoleInput.nextLine();					
-				}
-				else if (userSelection == 5) {
+					this.userInput = this.consoleInput.nextLine();
+				} else if (userSelection == 5) {
 					System.out.println("");
 					this.uiCoachRefund();
 					System.out.println("Press anykey to continue...");
@@ -67,19 +66,19 @@ public class StageC {
 
 			// Print Message on Exit
 			if (userInput.toLowerCase().equals("q")) {
-				System.out.println("GoodBye! - Application Terminated.");	
+				System.out.println("GoodBye! - Application Terminated.");
 			}
 		}
 	}
-	
+
+	// Coach Creation/Configuration User Input
 	public void uiCoachAdd() {
 		this.input = new String[5];
 
-		
 		// START - Coach Configuration
 		// Seats
 		this.userInput = ""; // Reset Variable
-		
+
 		System.out.println("Coach - New Configuration");
 		System.out.println("*************************");
 		// Validate as Integer
@@ -88,52 +87,53 @@ public class StageC {
 				System.out.println("> Unexpected input \"" + this.userInput + "\", Expected Numerical Input...");
 				System.out.println("");
 			}
-			
+
 			System.out.print("Number of Rows : ");
 			this.userInput = this.consoleInput.nextLine();
 		}
 		this.input[0] = this.userInput;
-		
+
 		// Destination
 		System.out.print("Destination : ");
 		this.userInput = this.consoleInput.nextLine();
-		this.input[1]  = this.userInput;
+		this.input[1] = this.userInput;
 		System.out.println("");
-		
+
 		// Ticket Pricing
 		System.out.println("-- Ticket Pricing --");
-		
-		// Validate as Integer or Double 
+
+		// Validate as Integer or Double
 		this.userInput = ""; // Reset Variable
 		while (!this.userInput.matches("^[0-9]+$") && !this.userInput.matches("^\\d+\\.\\d+")) {
 			System.out.println("Input Standard (S) : ");
 			this.userInput = this.consoleInput.nextLine();
 		}
 		this.input[2] = this.userInput; // Add to array
-		
+
 		this.userInput = ""; // Reset Variable
 		while (!this.userInput.matches("^[0-9]+$") && !this.userInput.matches("^\\d+\\.\\d+")) {
 			System.out.println("Input Pensioner (P) : ");
 			this.userInput = this.consoleInput.nextLine();
 		}
 		this.input[3] = this.userInput; // Add to array
-		
+
 		this.userInput = ""; // Reset Variable
 		while (!this.userInput.matches("^[0-9]+$") && !this.userInput.matches("^\\d+\\.\\d+")) {
 			System.out.println("Input Discounted Frequent Customers (F) : ");
 			this.userInput = this.consoleInput.nextLine();
 		}
 		this.input[4] = this.userInput; // Add to array
-		
-		System.out.println("");
-		// Push to backend
-		this.backEnd.coachAdd(this.input);
 
+		System.out.println("");
+
+		// Push to backend for further processing
+		this.backEnd.coachAdd(this.input);
 	}
-	
+
+	// Coach Booking User Input
 	public void uiCoachBook() {
 		this.input = new String[3]; // Re Init array
-		
+
 		System.out.println("Coach - Ticket Booking");
 		System.out.println("***************************");
 		this.backEnd.coachPricing(); // Display ticket pricing
@@ -148,12 +148,12 @@ public class StageC {
 				System.out.println("> Unexpected input \"" + this.userInput + "\", Expected Numerical Input...");
 				System.out.println("");
 			}
-			
+
 			System.out.println("Standard Ticket/s # : ");
 			this.userInput = this.consoleInput.nextLine();
 		}
 		this.input[0] = this.userInput; // Copy user input to input array
-		
+
 		// Pensioner Ticket - Validate as Integer
 		this.userInput = ""; // Reset Variable
 		while (!this.userInput.matches("^[0-9]+$")) {
@@ -161,7 +161,7 @@ public class StageC {
 				System.out.println("> Unexpected input \"" + this.userInput + "\", Expected Numerical Input...");
 				System.out.println("");
 			}
-			
+
 			System.out.println("Pensioner Ticket/s # : ");
 			this.userInput = this.consoleInput.nextLine();
 		}
@@ -174,31 +174,32 @@ public class StageC {
 				System.out.println("> Unexpected input \"" + this.userInput + "\", Expected Numerical Input...");
 				System.out.println("");
 			}
-			
+
 			System.out.println("Frequent Ticket/s # : ");
 			this.userInput = this.consoleInput.nextLine();
 		}
-		this.input[2] = this.userInput; // Copy user input to input array		
-		
+		this.input[2] = this.userInput; // Copy user input to input array
+
 		System.out.println("");
-		
+
 		// Pass array to the backend for processing
 		this.backEnd.coachBook(this.input);
-		
-		
+
 	}
-	
+
+	// Coach Refund User Input
 	public void uiCoachRefund() {
 		System.out.println("Coach - Ticket Refund");
 		System.out.println("*********************");
 		System.out.println("Example: 0 2 3 4");
 		System.out.println("");
 		this.userInput = "";
-		
+
 		// Make sure we have numbers and whitepace only!
-		while (!this.userInput.matches("^[0-9\s]+$")) {		
+		while (!this.userInput.matches("^[0-9\s]+$")) {
 			if (!this.userInput.equals("") && !this.userInput.matches("^[0-9]+$")) {
-				System.out.println("> Unexpected input \"" + this.userInput + "\", Expected Numerical Input with whitepaces....");
+				System.out.println(
+						"> Unexpected input \"" + this.userInput + "\", Expected Numerical Input with whitepaces....");
 				System.out.println("Example: 0 2 3 4");
 				System.out.println("");
 			}
@@ -206,9 +207,9 @@ public class StageC {
 			this.userInput = this.consoleInput.nextLine();
 		}
 		System.out.println("");
-		
+
 		// Pass input to backend
 		this.backEnd.coachRefund(this.userInput);
 	}
-	
+
 }
